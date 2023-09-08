@@ -4,18 +4,21 @@ import sys
 from datetime import datetime
 
 file = open("RainWorldSaveDir.txt", "r")
-rainWorldSaveDir = file.read()
+rainWorldSaveDirText = file.read()
 file.close()
 
-rainWorldSaveDir = pathlib.Path(rainWorldSaveDir)
+rainWorldSaveDir = pathlib.Path(rainWorldSaveDirText)
 savsDir = rainWorldSaveDir.joinpath("RWCPsavs")
 backupsDir = savsDir.joinpath("backups")
 currSavNameDir = rainWorldSaveDir.joinpath("RWCPselectedSav.txt")
 currSavFileDir = rainWorldSaveDir.joinpath("sav")
 
 
-print("\n")
 
+print("\n")
+if(rainWorldSaveDirText == ""):
+    print("Please add your rain world path to RainWorldSaveDir.txt (Looks something like \"C:\[USER]\socks\AppData\LocalLow\Videocult\Rain World\")")
+    sys.exit()
 if(not rainWorldSaveDir.is_dir()):
     print("Path does not exist")
     sys.exit()
@@ -89,7 +92,6 @@ createBackup() # we have this in a function so we dont pollute the main function
 
 
 
-
 def printMainMenu():
     print("Saves:")
     print("-  " + getCurrSaveName() + " *Selected*")
@@ -99,18 +101,18 @@ def printMainMenu():
     print("\nMain Menu")
     print("1 - Load a save")
     print("2 - Copy selected save")
-    print("3 - Delete a save (Can't be selected save)\n")
+    print("3 - Delete a save (Can't be selected save)")
+    print("4 - Quit\n")
+
+def isValidSave(saveName):
+    l = getSavesNames()
+    return (saveName in l)
 
 def clear():
     print("\n"*100)
 
 def pause(msg = "\n -> Press \"Enter\" to continue <-"):
     input(msg)
-
-def isValidSave(saveName):
-    l = getSavesNames()
-    return (saveName in l)
-
 
 # loads a save from the savs folder into rain world folder
 def loadSave(saveName):
@@ -198,6 +200,9 @@ while(True):
                 continue
             deleteSave(saveToRemove) # delete save, risky biusness
             print("\n\tDeleted \"" + saveToRemove + "\"")
+        case "4":
+            print("Goodbye\n")
+            sys.exit()
         case _:
             print("That isn't an option")
     pause()
