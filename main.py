@@ -2,6 +2,7 @@ import pathlib
 import shutil
 import sys
 from datetime import datetime
+import subprocess
 
 file = open("RainWorldSaveDir.txt", "r")
 rainWorldSaveDirText = file.read()
@@ -102,7 +103,8 @@ def printMainMenu():
     print("1 - Load a save")
     print("2 - Copy selected save")
     print("3 - Delete a save (Can't be selected save)")
-    print("4 - Quit\n")
+    print("4 - Load save into selected (Will replace current)")
+    print("5 - Open Rain World folder")
 
 def isValidSave(saveName):
     l = getSavesNames()
@@ -144,6 +146,18 @@ def deleteSave(saveName):
         sys.exit()
     
     savsDir.joinpath(saveName + ".RWCPsav").unlink()
+
+# delete current save and copy another save into it
+def loadBackup(saveName):
+    if(not savsDir.joinpath(saveName + ".RWCPsav").is_file()):
+        print("Error in loadbackup() we just saved your life ;)")
+        sys.exit()
+    # delete current save
+    rainWorldSaveDir.joinpath("sav").unlink()
+
+    # copy and select new save
+    shutil.copy2(savsDir.joinpath(saveName + ".RWCPsav"), rainWorldSaveDir.joinpath("sav"))
+
 
 
  
@@ -201,8 +215,18 @@ while(True):
             deleteSave(saveToRemove) # delete save, risky biusness
             print("\n\tDeleted \"" + saveToRemove + "\"")
         case "4":
-            print("Goodbye\n")
-            sys.exit()
+            saveToReplaceCurrent = input("What save would you like to overide \"" + getCurrSaveName() + "\" with?:")
+            if(not isValidSave(saveToReplaceCurrent)):
+                print("\"" + saveToReplaceCurrent + "\" is not a valid option")
+                pause()
+                clear()
+                continue
+            loadBackup(saveToReplaceCurrent)
+            print("Overided selected save with \"" + saveToReplaceCurrent + "\" (Name is kept)")
+        case "5":
+            print("\nOpening Rain World Folder in file explorer (\"" + str(rainWorldSaveDir) + "\")")
+            print("Note: If you are trying to restore a backup of you saves, they can be found in \"RWCPsavs\\backups\"")
+            subprocess.Popen('explorer ' + str(rainWorldSaveDir))
         case _:
             print("That isn't an option")
     pause()
