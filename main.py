@@ -3,36 +3,34 @@ import shutil
 import sys
 from datetime import datetime
 import subprocess
+import os
+
+
+
 
 
 def ext():
     input("...")
     sys.exit()
 
-try:
-    file = open("RainWorldSaveDir.txt", "r")
-    rainWorldSaveDirText = file.read()
-    file.close()
-except:
-    print("Error opening \"RainWorldSaveDir.txt\" please make sure it exist in the same directory as the EXE")
+
+print("\n")
+
+appdataRoaming = os.environ.get("APPDATA")
+appdataLocalLow = os.path.normpath(appdataRoaming + "\\..\\LocalLow\\Videocult\\Rain World\\")
+
+rainWorldSaveDir = pathlib.Path(appdataLocalLow)
+
+if(not rainWorldSaveDir.exists()):
+    print("We could not find \""+str(rainWorldSaveDir)+"\" please make sure you have Rain World installed")
     ext()
 
-
-rainWorldSaveDir = pathlib.Path(rainWorldSaveDirText)
 savsDir = rainWorldSaveDir.joinpath("RWCPsavs")
 backupsDir = savsDir.joinpath("backups")
 currSavNameDir = rainWorldSaveDir.joinpath("RWCPselectedSav.txt")
 currSavFileDir = rainWorldSaveDir.joinpath("sav")
 
 
-
-print("\n")
-if(rainWorldSaveDirText == "PATH HERE" or rainWorldSaveDirText == 0 or rainWorldSaveDirText == ""):
-    print("Please add your rain world path to \"RainWorldSaveDir.txt\" (Looks something like \"C:\\users\\AppData\\LocalLow\\Videocult\\Rain World\")")
-    ext()
-if(not rainWorldSaveDir.is_dir()):
-    print("Given Rain world folder path does not exist, please update the path in \"RainWorldSaveDir.txt\"\n(Looks something like \"C:\\users\\AppData\\LocalLow\\Videocult\\Rain World\")")
-    ext()
 print("Using path:", rainWorldSaveDir, "\n")
 
 # Check if all requird directories and files exist int he rain world 
