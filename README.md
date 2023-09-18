@@ -10,7 +10,7 @@ Click [here](https://github.com/olliez-mods/RainWorldCheckPointTool/releases/lat
 
 When you run the program for the first time it will prompt you to create some files and folders, Make sure the path to these items is correct.
   
-  Once you get into the main menu there are your options, use "help <number>" to get more info on each option.
+  Once you get into the main menu there are your options, use "help \<number\>" to get more info on each option.
   <br/><br/>
   
 ## Backup Folder:
